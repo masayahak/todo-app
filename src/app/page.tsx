@@ -1,6 +1,9 @@
 import { getAllTodos } from "@/lib/todo";
 import { TodoApp } from "@/components/TodoApp";
 
+// ビルド時は無視、アクセス時に取得
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const todos = await getAllTodos();
 
