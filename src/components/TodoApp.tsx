@@ -15,6 +15,8 @@ import {
   logoutAction,
 } from "@/app/(protected)/actions";
 import { TodoList } from "./TodoList";
+import { useRouter } from "next/navigation";
+
 
 type PropsType = {
   todos: Todo[];
@@ -24,6 +26,8 @@ export const TodoApp = ({ todos }: PropsType) => {
   const [newTodo, setNewTodo] = useState("");
   const [showCompleted, setShowCompleted] = useState(false);
 
+  const router = useRouter();
+  
   // --- アクション ---
   const handleAdd = async () => {
     const title = newTodo.trim();
@@ -32,7 +36,8 @@ export const TodoApp = ({ todos }: PropsType) => {
       await addTodoAction(title);
       setNewTodo("");
     } catch (e) {
-      alert("ログインセッションが切れました。再ログインしてください。");
+      router.replace("/login");
+      router.refresh();
     }
   };
 
@@ -44,7 +49,8 @@ export const TodoApp = ({ todos }: PropsType) => {
     try {
       await doneTodoAction(id);
     } catch (e) {
-      alert("ログインセッションが切れました。再ログインしてください。");
+      router.replace("/login");
+      router.refresh();
     }
   };
 
@@ -52,7 +58,8 @@ export const TodoApp = ({ todos }: PropsType) => {
     try {
       await deleteTodoAction(id);
     } catch (e) {
-      alert("ログインセッションが切れました。再ログインしてください。");
+      router.replace("/login");
+      router.refresh();
     }
   };
 

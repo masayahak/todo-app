@@ -3,6 +3,7 @@
 import type React from "react";
 
 import { useActionState, useState } from "react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -86,14 +87,19 @@ export function AuthForm() {
               {state.errors.form}
             </div>
           )}
+
           <Button type="submit" disabled={isPending} className="w-full">
-            {isPending
-              ? mode === "login"
-                ? "ログイン中..."
-                : "登録中..."
-              : mode === "login"
-              ? "ログイン"
-              : "新規ユーザー作成"}
+            {isPending ? (
+              <>
+                {/* animate-spin クラスで回転させます */}
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {mode === "login" ? "ログイン中..." : "登録中..."}
+              </>
+            ) : mode === "login" ? (
+              "ログイン"
+            ) : (
+              "新規ユーザー作成"
+            )}
           </Button>
         </form>
         <div className="mt-4 text-center text-sm">
@@ -123,14 +129,14 @@ export function AuthForm() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-8 mb-4 text-lg text-center text-muted-foreground">
+        <footer className="mt-8 mb-4 text-xs text-center text-muted-foreground">
           <div className="mb-2">
             <span>Developed by </span>
             <a
               href="https://hakamata-soft.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 hover:underline font-medium"
+              className="text-blue-900 hover:underline"
             >
               HakamataSoft
             </a>

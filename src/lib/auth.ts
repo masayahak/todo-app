@@ -46,8 +46,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60 * 24, // 24H (これが本当の寿命)
-    updateAge: 60 * 60, // 60分
+    maxAge: 60 * 5, // 5分 (これが本当の寿命)
+    updateAge: 60 * 1, // 1分後の操作で更新
   },
   pages: {
     signIn: "/login",
