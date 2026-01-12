@@ -13,10 +13,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id     Int     @id @default(autoincrement())
-  タイトル String
-  is完了  Boolean @default(false)
+model User {
+  id       String @id @default(uuid())
+  user     String @unique
+  password String
 
-  @@map("Todo")
-} 
+  todos    Todo[]
+
+  @@map("Users")
+}
+
+model Todo {
+  id      Int     @id @default(autoincrement())
+  userId  String
+  タスク String
+  is完了   Boolean @default(false)
+
+  User    User    @relation(fields: [userId], references: [id])
+
+  @@map("Todos")
+}

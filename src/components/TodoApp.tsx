@@ -2,13 +2,18 @@
 
 import type React from "react";
 import { useState } from "react";
-import { Todo } from "@/generated/prisma/client";
-import { Plus } from "lucide-react";
+import { Todo } from "@prisma/client";
+import { Plus, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { addTodoAction, doneTodoAction, deleteTodoAction } from "@/app/actions";
+import {
+  addTodoAction,
+  doneTodoAction,
+  deleteTodoAction,
+  logoutAction,
+} from "@/app/(protected)/actions";
 import { TodoList } from "./TodoList";
 
 type PropsType = {
@@ -23,8 +28,12 @@ export const TodoApp = ({ todos }: PropsType) => {
   const handleAdd = async () => {
     const title = newTodo.trim();
     if (title === "") return;
-    await addTodoAction(title);
-    setNewTodo("");
+    try {
+      await addTodoAction(title);
+      setNewTodo("");
+    } catch (e) {
+      alert("ログインセッションが切れました。再ログインしてください。");
+    }
   };
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -32,11 +41,19 @@ export const TodoApp = ({ todos }: PropsType) => {
   };
 
   const handleToggle = async (id: number) => {
-    await doneTodoAction(id);
+    try {
+      await doneTodoAction(id);
+    } catch (e) {
+      alert("ログインセッションが切れました。再ログインしてください。");
+    }
   };
 
   const handleDelete = async (id: number) => {
-    await deleteTodoAction(id);
+    try {
+      await deleteTodoAction(id);
+    } catch (e) {
+      alert("ログインセッションが切れました。再ログインしてください。");
+    }
   };
 
   // 「完了したタスクも表示」をチェック／チェックオフ
@@ -49,9 +66,18 @@ export const TodoApp = ({ todos }: PropsType) => {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">
-          ToDoリスト
-        </CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-2xl font-bold">ToDoリスト</CardTitle>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => logoutAction()}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <LogOut className="h-4 w-4 mr-1" />
+            ログアウト
+          </Button>
+        </div>
         <p className="text-sm text-muted-foreground text-center">
           {completedCount} / {todos.length} 完了
         </p>

@@ -1,5 +1,5 @@
 import type React from "react";
-import { Todo } from "@/generated/prisma/client";
+import { Todo } from "@prisma/client";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -25,9 +25,7 @@ export const TodoItem = ({ todo, onToggle, onDelete }: Props) => {
       <Checkbox
         checked={todo.is完了}
         onCheckedChange={() => onToggle(todo.id)}
-        aria-label={`${todo.タイトル}を${
-          todo.is完了 ? "未完了" : "完了"
-        }にする`}
+        aria-label={`${todo.タスク}を${todo.is完了 ? "未完了" : "完了"}にする`}
       />
       <span
         className={cn(
@@ -35,7 +33,7 @@ export const TodoItem = ({ todo, onToggle, onDelete }: Props) => {
           todo.is完了 && "line-through text-muted-foreground"
         )}
       >
-        {todo.タイトル}
+        {todo.タスク}
       </span>
       <Button
         variant="ghost"
