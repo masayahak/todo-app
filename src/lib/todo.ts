@@ -7,6 +7,7 @@ export const getMyTodos = async (userId: string): Promise<Todo[]> => {
     where: {
       userId: userId,
     },
+    orderBy: [{ is完了: "asc" }, { createdAt: "asc" }],
   });
   return todos;
 };

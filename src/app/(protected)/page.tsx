@@ -1,8 +1,9 @@
 import { getMyTodos } from "@/lib/todo";
 import { TodoApp } from "@/components/TodoApp";
-import { auth } from "@/lib/auth"; // auth関数のインポート
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
+// AWSへデプロイした時にこのページがダイナミックレンダリングなことを明示する
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
