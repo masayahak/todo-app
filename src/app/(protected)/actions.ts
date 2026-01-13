@@ -1,5 +1,5 @@
 "use server";
-import { addTodo, deleteTodo, doneTodo } from "@/lib/todo";
+import { addTodo, deleteTodo, toggleTodo } from "@/lib/todo";
 import { revalidatePath } from "next/cache";
 import { signOut } from "@/lib/auth";
 import { auth } from "@/lib/auth";
@@ -23,10 +23,10 @@ export const addTodoAction = async (title: string) => {
   revalidatePath("/");
 };
 
-export const doneTodoAction = async (id: number) => {
+export const toggleTodoAction = async (id: number) => {
   // DB操作
   const userId = await getUserId();
-  await doneTodo(userId, id);
+  await toggleTodo(userId, id);
 
   // UI操作（ルートページのキャッシュ todosを廃棄して再作成）
   revalidatePath("/");

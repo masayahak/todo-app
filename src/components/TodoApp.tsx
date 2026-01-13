@@ -10,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   addTodoAction,
-  doneTodoAction,
+  toggleTodoAction,
   deleteTodoAction,
   logoutAction,
 } from "@/app/(protected)/actions";
@@ -47,7 +47,7 @@ export const TodoApp = ({ todos }: PropsType) => {
 
   const handleToggle = async (id: number) => {
     try {
-      await doneTodoAction(id);
+      await toggleTodoAction(id);
     } catch (e) {
       router.replace("/login");
       router.refresh();

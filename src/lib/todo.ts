@@ -1,4 +1,3 @@
-"use server";
 import { Todo } from "@prisma/client";
 import prisma from "@/lib/prisma";
 
@@ -21,14 +20,20 @@ export const addTodo = async (userId: string, タスク: string) => {
   });
 };
 
-export const doneTodo = async (userId: string, id: number) => {
-  await prisma.todo.update({
+export const toggleTodo = async (userId: string, id: number) => {
+  const todo = await prisma.todo.findUnique({
     where: {
       id,
       userId,
     },
+  });
+  if (!todo) return;
+  await prisma.todo.update({
+    where: {
+      id,
+    },
     data: {
-      is完了: true,
+      is完了: !todo.is完了,
     },
   });
 };
