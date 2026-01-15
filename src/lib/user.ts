@@ -1,6 +1,7 @@
 "use server";
-import { User } from "@prisma/client";
-import prisma from "@/lib/prisma";
+
+import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client"; // ← これをインポート
 import bcrypt from "bcryptjs";
 
 export const getUserId = async (
@@ -24,16 +25,20 @@ export const getUserId = async (
 
 export const addUser = async (user: string, plainPassword: string) => {
   const password = await bcrypt.hash(plainPassword, 10);
-  
+
   try {
     await prisma.user.create({
       data: { user, password },
     });
     return { success: true };
-  } catch (error: any) {
-    // Prismaのエラーコード P2002 は「一意制約違反（重複）」
-    if (error.code === 'P2002') {
-      return { success: false, error: "そのユーザー名は既に使用されています" };
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return {
+          success: false,
+          error: "そのユーザー名は既に使用されています",
+        };
+      }
     }
     throw error; // 想定外のエラーは投げ直す
   }
